@@ -2,53 +2,78 @@
 
 PYTHON = python3
 PACKAGES = core coregistration features geometry io mask ml_tools
+PYLINT = pylint
 
 .PHONY: $(PACKAGES:test)
 
 help:
 	@echo "Use 'make upload-<package>' to upload the package to PyPi"
+	@echo "Use 'make pylint' to run pylint on the code of all subpackages"
+
+pylint:
+	$(PYLINT) core/eolearn/core/*.py
+	$(PYLINT) coregistration/eolearn/coregistration/*.py
+	$(PYLINT) features/eolearn/features/*.py
+	$(PYLINT) geometry/eolearn/geometry/*.py
+	$(PYLINT) io/eolearn/io/*.py
+	$(PYLINT) mask/eolearn/mask/*.py
+	$(PYLINT) ml_tools/eolearn/ml_tools/*.py
 
 .ONESHELL:
 build-core:
 	cd core
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-coregistration:
 	cd coregistration
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-features:
 	cd features
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-geometry:
 	cd geometry
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-io:
 	cd io
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-mask:
 	cd mask
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-ml-tools:
 	cd ml_tools
+	cp ../LICENSE LICENSE
 	rm -r dist
 	$(PYTHON) setup.py sdist
+	rm LICENSE
 
 .ONESHELL:
 build-abstract-package:

@@ -79,7 +79,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = []
+exclude_patterns = ['**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -96,6 +96,8 @@ todo_include_todos = True
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+html_logo = './figures/eo-learn-logo-white.png'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -200,20 +202,61 @@ epub_exclude_files = ['search.html']
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/3.6/': None}
 
+
+EXAMPLES_FOLDER = './examples'
+MARKDOWNS_FOLDER = './markdowns'
+
 # copy examples
-shutil.rmtree('./examples', ignore_errors=True)
+shutil.rmtree(EXAMPLES_FOLDER, ignore_errors=True)
+shutil.rmtree(MARKDOWNS_FOLDER, ignore_errors=True)
 
 try:
-    shutil.copytree('../../examples', './examples')
+    shutil.copytree('../../examples', EXAMPLES_FOLDER)
+    os.mkdir(MARKDOWNS_FOLDER)
+    shutil.copyfile('../../CONTRIBUTING.md', os.path.join(MARKDOWNS_FOLDER, 'CONTRIBUTING.md'))
 except FileExistsError:
     pass
 
-# Create a list of all EOTasks
 
+def process_readme():
+    """ Function which will process README.md file and divide it into INTRO.md and INSTALL.md, which will be used in
+    documentation
+    """
+    with open('../../README.md', 'r') as file:
+        readme = file.read()
+
+    readme = readme.replace('# eo-learn', '# Introduction').replace('docs/source/', '')
+    readme = readme.replace('**`', '**').replace('`**', '**')
+
+    chapters = [[]]
+    for line in readme.split('\n'):
+        if line.strip().startswith('## '):
+            chapters.append([])
+        if line.startswith('<img'):
+            line = '<p></p>'
+
+        chapters[-1].append(line)
+
+    chapters = ['\n'.join(chapter) for chapter in chapters]
+
+    intro = '\n'.join([chapter for chapter in chapters if not (chapter.startswith('## Install') or
+                                                               chapter.startswith('## Documentation'))])
+    install = '\n'.join([chapter for chapter in chapters if chapter.startswith('## Install')])
+
+    with open(os.path.join(MARKDOWNS_FOLDER, 'INTRO.md'), 'w') as file:
+        file.write(intro)
+    with open(os.path.join(MARKDOWNS_FOLDER, 'INSTALL.md'), 'w') as file:
+        file.write(install)
+
+
+process_readme()
+
+
+# Create a list of all EOTasks
 def get_subclasses(cls):
     direct_subclasses = cls.__subclasses__()
-    nested_subclasses = [ s for c in direct_subclasses
-                          for s in get_subclasses(c) ]
+    nested_subclasses = [s for c in direct_subclasses
+                         for s in get_subclasses(c)]
 
     return list(set(direct_subclasses).union(nested_subclasses))
 
@@ -228,6 +271,7 @@ def get_eotasks():
     import eolearn.ml_tools
 
     return get_subclasses(eolearn.core.EOTask)
+
 
 with open('eotasks.rst', 'w') as f:
     f.write('********\n')
