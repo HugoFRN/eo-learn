@@ -7,7 +7,7 @@ from eolearn.core import EOTask, FeatureType
 
 class HOGTask(EOTask):
     """
-    Task to compute the histogram of gradient
+    Task to compute the histogram of oriented gradient
 
     Divide the image into small connected regions called cells, and for each cell compute a histogram of gradient
     directions or edge orientations for the pixels within the cell.
@@ -19,7 +19,7 @@ class HOGTask(EOTask):
                  visualize=True, visualize_feature_name=''):
         """
         :param feature: A feature that will be used and a new feature name where data will be saved. If new name is not
-        specified it will be saved with name '<feature_name>_HARALICK'
+        specified it will be saved with name '<feature_name>_HOG'
 
         Example: (FeatureType.DATA, 'bands') or (FeatureType.DATA, 'bands', 'hog')
 

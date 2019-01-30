@@ -29,7 +29,7 @@ class BlobTask(EOTask):
     def __init__(self, feature, method, min_sigma=1, max_sigma=30, threshold=0.1, overlap=0.5, **kwargs):
         """
         :param feature: A feature that will be used and a new feature name where data will be saved. If new name is not
-        specified it will be saved with name '<feature_name>_HARALICK'
+        specified it will be saved with name '<feature_name>_BLOB'
 
         Example: (FeatureType.DATA, 'bands') or (FeatureType.DATA, 'bands', 'blob')
 

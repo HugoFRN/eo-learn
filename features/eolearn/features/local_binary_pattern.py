@@ -17,7 +17,7 @@ class LocalBinaryPatternTask(EOTask):
     def __init__(self, feature, nb_points=24, radius=3):
         """
         :param feature: A feature that will be used and a new feature name where data will be saved. If new name is not
-        specified it will be saved with name '<feature_name>_HARALICK'
+        specified it will be saved with name '<feature_name>_LBP'
 
         Example: (FeatureType.DATA, 'bands') or (FeatureType.DATA, 'bands', 'lbp')
 
@@ -27,7 +27,7 @@ class LocalBinaryPatternTask(EOTask):
         :type radius: int
         """
         self.feature = self._parse_features(feature, default_feature_type=FeatureType.DATA, new_names=True,
-                                            rename_function='{}_HARALICK'.format)
+                                            rename_function='{}_LBP'.format)
 
         self.nb_points = nb_points
         self.radius = radius
